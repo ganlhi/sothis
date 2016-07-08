@@ -10,8 +10,14 @@ import { SothisService } from '../sothis.service';
 })
 export class SensorsComponent implements OnInit {
 
-  temperature: number;
-  humidity: number;
+  private _sensors: { [key:string]:number; } = {
+    temperature: null,
+    humidity: null
+  };
+
+  get temperature(): number { return this._sensors['temperature'] }
+  get humidity(): number { return this._sensors['humidity'] }
+
   cameraSnapshotUrl: string;
   cameraSnapshotLoading: boolean;
 
@@ -21,14 +27,13 @@ export class SensorsComponent implements OnInit {
   constructor(private service: SothisService) {}
 
   ngOnInit() {
-    this.temperature = 21;
-    this.humidity = 39;
     this.updateCameraSnapshotUrl();
 
-    this.service.sensorUpdate$.subscribe(msg => {
-      let [type, value] = msg;
-      if (type === 'temperature') this.temperature = value;
-      if (type === 'humidity')    this.humidity    = value;
+    this.service.requestCurrentState();
+
+    this.service.sensorUpdate$.subscribe(update => {
+      let [type, value] = update;
+      this._sensors[type] = value;
     })
   }
 

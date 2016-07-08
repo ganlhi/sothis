@@ -13,6 +13,14 @@ export class SothisService {
     this._initWebSocket();
   }
 
+  requestCurrentState() {
+    if (this._ws.readyState == WebSocket.OPEN) {
+      this._ws.send(JSON.stringify({topic: 'current_state'}));
+    } else {
+      setTimeout(() => this.requestCurrentState(), 100);
+    }
+  }
+
   private _initWebSocket(retrySeconds: number = 2): void {
     let reconnectScheduled = false;
     let _scheduleReconnect = () => {
