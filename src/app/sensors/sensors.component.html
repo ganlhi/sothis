@@ -1,0 +1,7 @@
+<p>Temperature: {{temperature}}°C</p>
+<p>Humidity: {{humidity}}%</p>
+
+<div class="camera">
+  <img [src]="cameraSnapshotUrl" (load)="updateCameraSnapshotUrl(1000)">
+  <span class="loading" [hidden]="!cameraSnapshotLoading">Loading...</span>
+</div>
