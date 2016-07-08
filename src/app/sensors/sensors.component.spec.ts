@@ -11,10 +11,13 @@ import {
 } from '@angular/core/testing';
 
 import { SensorsComponent } from './sensors.component';
+import { SothisService } from '../sothis.service';
 
 describe('Component: Sensors', () => {
   it('should create an instance', () => {
-    let component = new SensorsComponent();
-    expect(component).toBeTruthy();
+    inject([SothisService], (service: SothisService) => {
+      let component = new SensorsComponent(service);
+      expect(component).toBeTruthy();
+    })
   });
 });

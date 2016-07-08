@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { SothisService } from '../sothis.service';
 
 @Component({
   moduleId: module.id,
   selector: 'app-sensors',
   templateUrl: 'sensors.component.html',
-  styleUrls: ['sensors.component.css']
+  styleUrls: ['sensors.component.css'],
+  providers: [SothisService]
 })
 export class SensorsComponent implements OnInit {
 
@@ -13,15 +15,21 @@ export class SensorsComponent implements OnInit {
   cameraSnapshotUrl: string;
   cameraSnapshotLoading: boolean;
 
-  static _cameraUrl  = 'http://78.245.98.112:25081';
-  static _cameraAuth = { user: 'guest', password: 'sothiscam' };
+  private static _cameraUrl  = 'http://78.245.98.112:25081';
+  private static _cameraAuth = { user: 'guest', password: 'sothiscam' };
 
-  constructor() {}
+  constructor(private service: SothisService) {}
 
   ngOnInit() {
     this.temperature = 21;
     this.humidity = 39;
     this.updateCameraSnapshotUrl();
+
+    this.service.sensorUpdate$.subscribe(msg => {
+      let [type, value] = msg;
+      if (type === 'temperature') this.temperature = value;
+      if (type === 'humidity')    this.humidity    = value;
+    })
   }
 
   updateCameraSnapshotUrl(delay?: number) {
