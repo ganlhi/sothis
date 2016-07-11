@@ -1,3 +1,5 @@
-<p>
-  switches works!
-</p>
+<ul>
+  <li *ngFor="let sw of switchesNames"
+    (click)="toggle(sw)"
+  >{{sw}} | {{switchState(sw)?'on':'off'}}</li>
+</ul>

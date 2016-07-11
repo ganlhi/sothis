@@ -6,8 +6,10 @@ export class SothisService {
   private static _baseUrl = 'localhost:1880';
   private _ws: WebSocket;
   private _sensorUpdateSource: Subject<[string, number]> = new Subject<[string, number]>();
+  private _switchUpdateSource: Subject<[string, boolean]> = new Subject<[string, boolean]>();
 
   sensorUpdate$ = this._sensorUpdateSource.asObservable();
+  switchUpdate$ = this._switchUpdateSource.asObservable();
 
   constructor() {
     this._initWebSocket();
@@ -19,6 +21,21 @@ export class SothisService {
     } else {
       setTimeout(() => this.requestCurrentState(), 100);
     }
+  }
+
+  setSwitchState(name: string, targetState: boolean) {
+    let message = {'topic': `switch/${name}`, 'payload': targetState};
+    this._ws.send(JSON.stringify(message));
+  }
+
+  setShutterState(name: string, targetState: boolean) {
+    let message = {'topic': `shutter/${name}`, 'payload': targetState};
+    this._ws.send(JSON.stringify(message));
+  }
+
+  setRoofState(targetState: boolean) {
+    let message = {'topic': 'roof', 'payload': targetState};
+    this._ws.send(JSON.stringify(message));
   }
 
   private _initWebSocket(retrySeconds: number = 2): void {
@@ -55,6 +72,10 @@ export class SothisService {
     switch (topicParts[0]) {
       case 'sensor':
         this._sensorUpdateSource.next([topicParts[1], <number>data.payload]);
+        break;
+
+      case 'switch':
+        this._switchUpdateSource.next([topicParts[1], <boolean>data.payload]);
         break;
 
       default:
