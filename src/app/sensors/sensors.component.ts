@@ -5,8 +5,7 @@ import { SothisService } from '../sothis.service';
   moduleId: module.id,
   selector: 'app-sensors',
   templateUrl: 'sensors.component.html',
-  styleUrls: ['sensors.component.css'],
-  providers: [SothisService]
+  styleUrls: ['sensors.component.css']
 })
 export class SensorsComponent implements OnInit {
 
