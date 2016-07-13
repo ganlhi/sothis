@@ -5,11 +5,15 @@ import { Subject } from 'rxjs/Subject';
 export class SothisService {
   private static _baseUrl = 'localhost:1880';
   private _ws: WebSocket;
-  private _sensorUpdateSource: Subject<[string, number]> = new Subject<[string, number]>();
-  private _switchUpdateSource: Subject<[string, boolean]> = new Subject<[string, boolean]>();
+  private _sensorUpdateSource:  Subject<[string, number]>  = new Subject<[string, number]>();
+  private _switchUpdateSource:  Subject<[string, boolean]> = new Subject<[string, boolean]>();
+  private _shutterUpdateSource: Subject<[string, boolean]> = new Subject<[string, boolean]>();
+  private _roofUpdateSource:    Subject<string|boolean>    = new Subject<string|boolean>();
 
-  sensorUpdate$ = this._sensorUpdateSource.asObservable();
-  switchUpdate$ = this._switchUpdateSource.asObservable();
+  sensorUpdate$  = this._sensorUpdateSource.asObservable();
+  switchUpdate$  = this._switchUpdateSource.asObservable();
+  shutterUpdate$ = this._shutterUpdateSource.asObservable();
+  roofUpdate$    = this._roofUpdateSource.asObservable();
 
   constructor() {
     this._initWebSocket();
@@ -76,6 +80,14 @@ export class SothisService {
 
       case 'switch':
         this._switchUpdateSource.next([topicParts[1], <boolean>data.payload]);
+        break;
+
+      case 'shutter':
+        this._shutterUpdateSource.next([topicParts[1], <boolean>data.payload]);
+        break;
+
+      case 'roof':
+        this._roofUpdateSource.next(data.payload);
         break;
 
       default:

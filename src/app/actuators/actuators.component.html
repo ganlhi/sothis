@@ -1,3 +1,11 @@
-<p>
-  actuators works!
-</p>
+<ul>
+  <li *ngFor="let sh of shuttersNames"
+    (click)="toggle(sh)"
+  >{{sh}} | {{shutterState(sh)?'on':'off'}}</li>
+</ul>
+
+<ul>
+  <li><a (click)="setRoofState(false)" [class.disabled]="roofState === false">Close roof</a></li>
+  <li class="roof-state-{{roofState}}">Roof state: {{roofState}}</li>
+  <li><a (click)="setRoofState(true)" [class.disabled]="roofState === true">Open roof</a></li>
+</ul>
