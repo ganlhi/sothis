@@ -1,11 +1,27 @@
-<ul>
-  <li *ngFor="let sh of shuttersNames"
-    (click)="toggle(sh)"
-  >{{sh}} | {{shutterState(sh)?'on':'off'}}</li>
-</ul>
+<md-grid-list cols="2">
+  <md-grid-tile *ngFor="let sh of shuttersNames">
+    <button md-raised-button [color]="shutterState(sh) ? 'primary' : 'warn'" (click)="toggle(sh)">{{sh}}</button>
+  </md-grid-tile>
+</md-grid-list>
 
-<ul>
-  <li><a (click)="setRoofState(false)" [class.disabled]="roofState === false">Close roof</a></li>
-  <li class="roof-state-{{roofState}}">Roof state: {{roofState}}</li>
-  <li><a (click)="setRoofState(true)" [class.disabled]="roofState === true">Open roof</a></li>
-</ul>
+<h3>Roof</h3>
+
+<md-grid-list cols="3">
+
+  <md-grid-tile>
+    <a md-mini-fab (click)="setRoofState(false)" [disabled]="roofState !== true">Close</a>
+  </md-grid-tile>
+
+  <md-grid-tile>
+    <md-progress-bar
+      [class]="roofState === 'closing' ? 'reversed' : ''"
+      [mode]="roofState === true || roofState === false ? 'determinate' : 'indeterminate'"
+      [value]="roofState === true ? 100 : 0"
+    ></md-progress-bar>
+  </md-grid-tile>
+
+  <md-grid-tile>
+    <a md-mini-fab (click)="setRoofState(true)" [disabled]="roofState !== false">Open</a>
+  </md-grid-tile>
+
+</md-grid-list>

@@ -20,6 +20,7 @@ const materialPkgs:string[] = [
   'button',
   'grid-list',
   'progress-circle',
+  'progress-bar',
 ];
 materialPkgs.forEach((pkg) => {
   packages[`@angular2-material/${pkg}`] = {main: `${pkg}.js`};

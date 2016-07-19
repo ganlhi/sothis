@@ -1,0 +1,8 @@
+h3 {
+  text-align: center;
+  margin: 10px 0 0;
+}
+
+md-progress-bar.reversed {
+  transform: scale(-1, 1);
+}

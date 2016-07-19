@@ -1,11 +1,19 @@
 import { Component, OnInit } from '@angular/core';
+import { MD_GRID_LIST_DIRECTIVES } from '@angular2-material/grid-list';
+import { MD_BUTTON_DIRECTIVES } from '@angular2-material/button';
+import { MD_PROGRESS_BAR_DIRECTIVES } from '@angular2-material/progress-bar';
 import { SothisService } from '../sothis.service';
 
 @Component({
   moduleId: module.id,
   selector: 'app-actuators',
   templateUrl: 'actuators.component.html',
-  styleUrls: ['actuators.component.css']
+  styleUrls: ['actuators.component.css'],
+  directives: [
+    MD_GRID_LIST_DIRECTIVES,
+    MD_BUTTON_DIRECTIVES,
+    MD_PROGRESS_BAR_DIRECTIVES
+  ]
 })
 export class ActuatorsComponent implements OnInit {
 
