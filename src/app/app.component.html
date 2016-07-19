@@ -1,7 +1,13 @@
-<h1>Sothis</h1>
-<nav>
-  <a [routerLink]="['/sensors']">Sensors</a>
-  <a [routerLink]="['/switches']">Switches</a>
-  <a [routerLink]="['/actuators']">Actuators</a>
-</nav>
-<router-outlet></router-outlet>
+<md-card>
+  <md-card-title>Sothis</md-card-title>
+
+  <md-card-content>
+    <router-outlet></router-outlet>
+  </md-card-content>
+
+  <md-card-footer>
+    <a md-button [routerLink]="['/sensors']">Sensors</a>
+    <a md-button [routerLink]="['/switches']">Switches</a>
+    <a md-button [routerLink]="['/actuators']">Actuators</a>
+  </md-card-footer>
+</md-card>

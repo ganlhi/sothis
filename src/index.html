@@ -10,11 +10,73 @@
   {{/unless}}
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <style>
+    html {
+      height: 100%;
+    }
+
+    body {
+      background-color: #ccc;
+      height: 100%;
+      margin: 0;
+      overflow-y: hidden;
+    }
+
+    #app-loading-spinner {
+      width: 40px;
+      height: 40px;
+
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%);
+    }
+
+    #app-loading-spinner .double-bounce1, #app-loading-spinner .double-bounce2 {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background-color: #4f77a1;
+      opacity: 0.6;
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      -webkit-animation: app-loading-bounce 2.0s infinite ease-in-out;
+      animation: app-loading-bounce 2.0s infinite ease-in-out;
+    }
+
+    #app-loading-spinner .double-bounce2 {
+      -webkit-animation-delay: -1.0s;
+      animation-delay: -1.0s;
+    }
+
+    @-webkit-keyframes app-loading-bounce {
+      0%, 100% { -webkit-transform: scale(0.0) }
+      50% { -webkit-transform: scale(1.0) }
+    }
+
+    @keyframes app-loading-bounce {
+      0%, 100% {
+        transform: scale(0.0);
+        -webkit-transform: scale(0.0);
+      } 50% {
+        transform: scale(1.0);
+        -webkit-transform: scale(1.0);
+      }
+    }
+  </style>
 </head>
 <body>
-  <app-root>Loading...</app-root>
+  <app-root>
+    <div id="app-loading-spinner">
+      <div class="double-bounce1"></div>
+      <div class="double-bounce2"></div>
+    </div>
+  </app-root>
 
-  
+
 
     {{#each scripts.polyfills}}
     <script src="{{.}}"></script>
@@ -25,7 +87,7 @@
       }).catch(console.error.bind(console));
     </script>
 
-  
+
 
 </body>
 </html>

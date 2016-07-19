@@ -3,7 +3,7 @@ import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class SothisService {
-  private static _baseUrl = 'localhost:1880';
+  private static _baseUrl = window.location.hostname+':1880';//'localhost:1880';
   private _ws: WebSocket;
   private _sensorUpdateSource:  Subject<[string, number]>  = new Subject<[string, number]>();
   private _switchUpdateSource:  Subject<[string, boolean]> = new Subject<[string, boolean]>();

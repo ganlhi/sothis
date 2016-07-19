@@ -1,11 +1,17 @@
 import { Component, OnInit } from '@angular/core';
+import { MD_GRID_LIST_DIRECTIVES } from '@angular2-material/grid-list';
+import { MD_BUTTON_DIRECTIVES } from '@angular2-material/button';
 import { SothisService } from '../sothis.service';
 
 @Component({
   moduleId: module.id,
   selector: 'app-switches',
   templateUrl: 'switches.component.html',
-  styleUrls: ['switches.component.css']
+  styleUrls: ['switches.component.css'],
+  directives: [
+    MD_BUTTON_DIRECTIVES,
+    MD_GRID_LIST_DIRECTIVES
+  ]
 })
 export class SwitchesComponent implements OnInit {
 
@@ -19,13 +25,13 @@ export class SwitchesComponent implements OnInit {
   };
 
   get switchesNames(): string[] { return Object.keys(this._switches) }
-  
+
   constructor(private service: SothisService) {}
 
   switchState(name: string): boolean {
     return this._switches[name];
   }
-  
+
   ngOnInit() {
     this.service.requestCurrentState();
 

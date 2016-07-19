@@ -1,0 +1,35 @@
+:host() {
+  min-height: calc(100% - 30px);
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: center;
+  padding-top: 1em;
+}
+
+md-card {
+  width: 360px;
+  /*flex: 1;*/
+  display: flex;
+}
+
+/*md-card > div {
+  height: 100%;
+  flex: 1;
+  display: flex;
+}*/
+
+/*md-card-content {
+  flex: 1 0 auto;
+}*/
+
+md-card-footer {
+  width: calc(100% - 48px);
+  display: flex;
+  justify-content: space-between;
+}
+
+md-card-footer a {
+  flex: 1 0 auto;
+  text-align: center;
+}

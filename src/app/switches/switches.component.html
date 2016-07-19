@@ -1,5 +1,5 @@
-<ul>
-  <li *ngFor="let sw of switchesNames"
-    (click)="toggle(sw)"
-  >{{sw}} | {{switchState(sw)?'on':'off'}}</li>
-</ul>
+<md-grid-list cols="3">
+  <md-grid-tile *ngFor="let sw of switchesNames">
+    <button md-raised-button [color]="switchState(sw) ? 'primary' : 'accent'" (click)="toggle(sw)">{{sw}}</button>
+  </md-grid-tile>
+</md-grid-list>

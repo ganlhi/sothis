@@ -1,5 +1,20 @@
-<p>Temperature: {{temperature}}°C</p>
-<p>Humidity: {{humidity}}%</p>
+<md-grid-list cols="2">
+
+  <md-grid-tile class="progress">
+    <span class="text">
+      {{ temperature }}°C
+    </span>
+    <md-progress-circle mode="determinate" [value]="temperaturePercentage" color="warn"></md-progress-circle>
+  </md-grid-tile>
+
+  <md-grid-tile class="progress">
+    <span class="text">
+      {{ humidity }}%
+    </span>
+    <md-progress-circle mode="determinate" [value]="humidity" color="primary"></md-progress-circle>
+  </md-grid-tile>
+
+</md-grid-list>
 
 <div class="camera">
   <img [src]="cameraSnapshotUrl" (load)="updateCameraSnapshotUrl(1000)">
