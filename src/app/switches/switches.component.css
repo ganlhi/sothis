@@ -1,0 +1,9 @@
+[md-fab] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  font-size: 1.4em;
+}

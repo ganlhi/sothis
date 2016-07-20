@@ -1,6 +1,11 @@
+<h3>Shutters</h3>
+
 <md-grid-list cols="2">
   <md-grid-tile *ngFor="let sh of shuttersNames">
-    <button md-raised-button [color]="shutterState(sh) ? 'primary' : 'warn'" (click)="toggle(sh)">{{sh}}</button>
+    <button md-raised-button [color]="shutterState(sh) ? 'primary' : 'warn'" (click)="toggle(sh)">
+      <span class="icon icon-eye{{shutterState(sh) ? '' : '-off'}}"></span>
+      {{sh}}
+    </button>
   </md-grid-tile>
 </md-grid-list>
 
@@ -9,7 +14,9 @@
 <md-grid-list cols="3">
 
   <md-grid-tile>
-    <a md-mini-fab (click)="setRoofState(false)" [disabled]="roofState !== true">Close</a>
+    <a md-mini-fab (click)="setRoofState(false)" [disabled]="roofState !== true">
+      <span class="icon icon-eye-off"></span>
+    </a>
   </md-grid-tile>
 
   <md-grid-tile>
@@ -21,7 +28,9 @@
   </md-grid-tile>
 
   <md-grid-tile>
-    <a md-mini-fab (click)="setRoofState(true)" [disabled]="roofState !== false">Open</a>
+    <a md-mini-fab (click)="setRoofState(true)" [disabled]="roofState !== false">
+      <span class="icon icon-eye"></span>
+    </a>
   </md-grid-tile>
 
 </md-grid-list>

@@ -1,5 +1,7 @@
 <md-grid-list cols="3">
   <md-grid-tile *ngFor="let sw of switchesNames">
-    <button md-raised-button [color]="switchState(sw) ? 'primary' : 'warn'" (click)="toggle(sw)">{{sw}}</button>
+    <button md-fab [color]="switchState(sw) ? 'primary' : 'warn'" (click)="toggle(sw)">
+      <span class="icon icon-{{switchIcon(sw)}}"></span>
+    </button>
   </md-grid-tile>
 </md-grid-list>

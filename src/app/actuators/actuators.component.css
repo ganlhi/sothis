@@ -6,3 +6,21 @@ h3 {
 md-progress-bar.reversed {
   transform: scale(-1, 1);
 }
+
+md-grid-list {
+  padding-bottom: 150px !important;
+}
+
+md-grid-tile {
+  padding-top: 120px !important;
+}
+
+[md-mini-fab] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  font-size: 1.2em;
+}

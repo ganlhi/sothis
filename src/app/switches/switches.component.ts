@@ -32,6 +32,23 @@ export class SwitchesComponent implements OnInit {
     return this._switches[name];
   }
 
+  switchIcon(name: string): string {
+    let icons = {
+      'mount': 'telescope',
+      'fan': 'fan',
+      'usb': 'usb',
+      'camera': 'camera',
+      'flat': 'flatscreen',
+      'lock': ['lock', 'lock-open']
+    }
+
+    let icon = icons[name];
+
+    if (!icon) return 'plug';
+    if (typeof icon == 'string') return icon;
+    return icon[this.switchState(name) ? 0 : 1];
+  }
+
   ngOnInit() {
     this.service.requestCurrentState();
 
