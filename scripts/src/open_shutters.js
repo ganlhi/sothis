@@ -19,7 +19,7 @@ ws.on('open', () => {
     console.log(`Request ${topic} ${topicPrefix} state ${targetState}`);
     ws.send(JSON.stringify({
       topic: `${topicPrefix}/${topic}`,
-      state: targetState
+      payload: targetState
     }));  
   }
 })
@@ -29,9 +29,9 @@ ws.on('message', data => {
   let topic    = response.topic.split('/')[1];
   
   if (topicsDone.hasOwnProperty(topic) 
-    && response.state === targetState) 
+    && response.payload === targetState) 
   {
-    console.log(`${topic}: ${response.state}`);
+    console.log(`${topic}: ${response.payload}`);
     topicsDone[topic] = true;
     if (every(topicsDone, true)) {
       ws.close();
