@@ -1,0 +1,42 @@
+'use strict';
+
+let every     = require('../every.js');
+let config    = require('../config');
+let WebSocket = require('ws');
+
+let ws = new WebSocket(config.url);
+
+let topicsDone = {
+  'scope': false,
+  'guide': false
+}
+
+let topicPrefix = 'shutter';
+let targetState = true;
+
+ws.on('open', () => {
+  for (let topic in topicsDone) {
+    console.log(`Request ${topic} ${topicPrefix} state ${targetState}`);
+    ws.send(JSON.stringify({
+      topic: `${topicPrefix}/${topic}`,
+      state: targetState
+    }));  
+  }
+})
+
+ws.on('message', data => {
+  let response = JSON.parse(data);
+  let topic    = response.topic.split('/')[1];
+  
+  if (topicsDone.hasOwnProperty(topic) 
+    && response.state === targetState) 
+  {
+    console.log(`${topic}: ${response.state}`);
+    topicsDone[topic] = true;
+    if (every(topicsDone, true)) {
+      ws.close();
+      console.log('All OK - Exit in 1 second');
+      setTimeout(() => process.exit(), 1000);
+    }
+  }
+});  
