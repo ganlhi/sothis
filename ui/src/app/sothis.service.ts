@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
+import { environment } from './environment';
 
 @Injectable()
 export class SothisService {
-  private static _baseUrl = window.location.hostname+':1880';//'localhost:1880';
+  private static _baseUrl = environment.websocket;
   private _ws: WebSocket;
   private _sensorUpdateSource:  Subject<[string, number]>  = new Subject<[string, number]>();
   private _switchUpdateSource:  Subject<[string, boolean]> = new Subject<[string, boolean]>();
@@ -53,7 +54,7 @@ export class SothisService {
 
     console.log('Connecting to websocket');
 
-    this._ws = new WebSocket(`ws://${SothisService._baseUrl}/ws`);
+    this._ws = new WebSocket(`ws://${SothisService._baseUrl}`);
 
     this._ws.onopen = (e) => console.log('Connected to ws');
     this._ws.onmessage = this._handleWsMessage.bind(this);

@@ -1,3 +1,3 @@
 module.exports = {
-  url: 'ws://localhost:1880/ws'
+  url: 'ws://192.168.0.42:1880/api/socket'
 } 
