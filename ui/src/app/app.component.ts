@@ -7,7 +7,7 @@ import { SothisService } from './sothis.service';
 @Component({
   moduleId: module.id,
   selector: 'app-root',
-  templateUrl: 'app.component.html',
+  templateUrl: (window.innerWidth > 2*360) ? 'app.component-wide.html' : 'app.component-narrow.html',
   styleUrls: ['app.component.css'],
   directives: [ROUTER_DIRECTIVES, MD_CARD_DIRECTIVES, MD_BUTTON_DIRECTIVES],
   providers: [SothisService]
