@@ -9,10 +9,13 @@ import { SwitchesComponent } from './switches';
 import { ActuatorsComponent } from './actuators';
 import { IpcamComponent } from './ipcam';
 
+const wideWidth = 2 * 360;
+const isWide    = window.innerWidth > wideWidth;
+
 @Component({
   moduleId: module.id,
   selector: 'app-root',
-  templateUrl: (window.innerWidth > 2*360) ? 'app.component-wide.html' : 'app.component-narrow.html',
+  templateUrl: isWide ? 'app.component-wide.html' : 'app.component-narrow.html',
   styleUrls: ['app.component.css'],
   directives: [
     SensorsComponent,
@@ -26,4 +29,6 @@ import { IpcamComponent } from './ipcam';
   ],
   providers: [SothisService]
 })
-export class AppComponent {}
+export class AppComponent {
+  get gridWidth(): string { return `${wideWidth}px`; }
+}

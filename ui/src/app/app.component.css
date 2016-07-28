@@ -17,9 +17,15 @@
   width: 360px;
 }
 
+.container.wide {
+  width: 100%;
+}
+
 .content {
   flex: 1 0 auto;
 }
+
+.container.wide .content { margin: 0 auto; }
 
 .title {
   text-align: center;
@@ -28,6 +34,10 @@
 .narrow md-grid-list {
   margin: 0 5px;
 }
+
+.container.wide app-sensors   { width: 100%; }
+.container.wide app-switches  { width: 100%; }
+.container.wide app-actuators { width: 100%; }
 
 .md-tab-label {
   flex: 1;

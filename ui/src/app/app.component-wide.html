@@ -1,13 +1,25 @@
-<div class="container">
-  <h1 class="title">Sothis (w)</h1>
+<div class="container wide">
+  <h1 class="title">Sothis</h1>
 
-  <div class="content">
-    toto
-  </div>
+  <div class="content" [style.width]="gridWidth">
+    <md-grid-list cols="2" rowHeight="4:3">
 
-  <div class="footer">
-    <a md-button>Sensors</a>
-    <a md-button>Switches</a>
-    <a md-button>Actuators</a>
+      <md-grid-tile>
+        <app-ipcam></app-ipcam>
+      </md-grid-tile>
+
+      <md-grid-tile>
+        <app-actuators [small]="true"></app-actuators>
+      </md-grid-tile>
+
+      <md-grid-tile>
+        <app-sensors></app-sensors>
+      </md-grid-tile>
+
+      <md-grid-tile>
+        <app-switches></app-switches>
+      </md-grid-tile>
+
+    </md-grid-list>
   </div>
 </div>
