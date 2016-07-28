@@ -9,9 +9,12 @@
 
 .container {
   background-color: white;
-  width: 360px;
   display: flex;
   flex-direction: column;
+}
+
+.container.narrow {
+  width: 360px;
 }
 
 .content {
@@ -22,13 +25,10 @@
   text-align: center;
 }
 
-.footer {
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
+.narrow md-grid-list {
+  margin: 0 5px;
 }
 
-.footer a {
-  flex: 1 0 auto;
-  text-align: center;
+.md-tab-label {
+  flex: 1;
 }

@@ -16,6 +16,7 @@ const packages: any = {
 
 const materialPkgs:string[] = [
   'core',
+  'tabs',
   'card',
   'button',
   'grid-list',

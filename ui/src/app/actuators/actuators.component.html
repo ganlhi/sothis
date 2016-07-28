@@ -1,6 +1,6 @@
 <h3>Shutters</h3>
 
-<md-grid-list cols="2">
+<md-grid-list cols="2" [class]="small ? 'small' : ''">
   <md-grid-tile *ngFor="let sh of shuttersNames">
     <button md-raised-button [color]="shutterState(sh) ? 'primary' : 'warn'" (click)="toggle(sh)">
       <span class="icon icon-eye{{shutterState(sh) ? '' : '-off'}}"></span>
@@ -11,7 +11,7 @@
 
 <h3>Roof</h3>
 
-<md-grid-list cols="3">
+<md-grid-list cols="3" [class]="small ? 'small' : ''">
 
   <md-grid-tile>
     <a md-mini-fab (click)="setRoofState(false)" [disabled]="roofState !== true">

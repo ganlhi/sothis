@@ -1,13 +1,40 @@
-<div class="container">
+<div class="container narrow">
   <h1 class="title">Sothis</h1>
 
   <div class="content">
-    <router-outlet></router-outlet>
-  </div>
 
-  <div class="footer">
-    <a md-button [routerLink]="['/sensors']">Sensors</a>
-    <a md-button [routerLink]="['/switches']">Switches</a>
-    <a md-button [routerLink]="['/actuators']">Actuators</a>
+    <md-grid-list cols="3" rowHeight="200px">
+
+      <md-grid-tile colspan="1">
+        <app-sensors [small]="true"></app-sensors>
+      </md-grid-tile>
+
+      <md-grid-tile colspan="2">
+        <app-ipcam></app-ipcam>
+      </md-grid-tile>
+
+    </md-grid-list>
+
+
+    <md-tab-group>
+
+      <md-tab>
+        <template md-tab-label>Switches</template>
+
+        <template md-tab-content>
+          <app-switches></app-switches>
+        </template>
+      </md-tab>
+
+      <md-tab>
+        <template md-tab-label>Actuators</template>
+
+        <template md-tab-content>
+          <app-actuators [small]="true"></app-actuators>
+        </template>
+      </md-tab>
+
+    </md-tab-group>
+
   </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MD_GRID_LIST_DIRECTIVES } from '@angular2-material/grid-list';
 import { MD_BUTTON_DIRECTIVES } from '@angular2-material/button';
 import { MD_PROGRESS_BAR_DIRECTIVES } from '@angular2-material/progress-bar';
@@ -23,6 +23,8 @@ export class ActuatorsComponent implements OnInit {
   }
 
   private _roofState: boolean|string = null;
+
+  @Input() small = false;
 
   get roofState(): boolean|string { return this._roofState }
   get shuttersNames(): string[] { return Object.keys(this._shutters) }
