@@ -1,0 +1,4 @@
+<div class="camera">
+  <img [src]="cameraSnapshotUrl" (load)="updateCameraSnapshotUrl(1000)">
+  <span class="loading" [hidden]="!cameraSnapshotLoading">Loading...</span>
+</div>

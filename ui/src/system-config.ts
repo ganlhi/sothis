@@ -49,6 +49,7 @@ const barrels: string[] = [
   'app/sensors',
   'app/switches',
   'app/actuators',
+  'app/ipcam',
   /** @cli-barrel */
 ];
 
