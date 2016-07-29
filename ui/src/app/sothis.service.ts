@@ -10,11 +10,13 @@ export class SothisService {
   private _switchUpdateSource:  Subject<[string, boolean]> = new Subject<[string, boolean]>();
   private _shutterUpdateSource: Subject<[string, boolean]> = new Subject<[string, boolean]>();
   private _roofUpdateSource:    Subject<string|boolean>    = new Subject<string|boolean>();
+  private _noutUpdateSource:    Subject<string|boolean>    = new Subject<string|boolean>();
 
   sensorUpdate$  = this._sensorUpdateSource.asObservable();
   switchUpdate$  = this._switchUpdateSource.asObservable();
   shutterUpdate$ = this._shutterUpdateSource.asObservable();
   roofUpdate$    = this._roofUpdateSource.asObservable();
+  noutUpdate$    = this._noutUpdateSource.asObservable();
 
   constructor() {
     this._initWebSocket();
@@ -40,6 +42,11 @@ export class SothisService {
 
   setRoofState(targetState: boolean) {
     let message = {'topic': 'roof', 'payload': targetState};
+    this._ws.send(JSON.stringify(message));
+  }
+
+  wakeNout() {
+    let message = {'topic': 'wake_nout'};
     this._ws.send(JSON.stringify(message));
   }
 
@@ -89,6 +96,10 @@ export class SothisService {
 
       case 'roof':
         this._roofUpdateSource.next(data.payload);
+        break;
+
+      case 'nout':
+        this._noutUpdateSource.next(data.payload);
         break;
 
       default:

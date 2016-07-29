@@ -11,7 +11,7 @@
 
 <h3>Roof</h3>
 
-<md-grid-list cols="3" [class]="small ? 'small' : ''">
+<md-grid-list cols="4" [class]="small ? 'small' : ''">
 
   <md-grid-tile>
     <a md-mini-fab (click)="setRoofState(false)" [disabled]="roofState !== true">
@@ -31,6 +31,12 @@
     <a md-mini-fab (click)="setRoofState(true)" [disabled]="roofState !== false">
       <span class="icon icon-eye"></span>
     </a>
+  </md-grid-tile>
+
+  <md-grid-tile>
+    <button md-fab [color]="lockState ? 'primary' : 'warn'" (click)="toggleLock()">
+      <span class="icon icon-{{lockState ? 'lock' : 'lock-open'}}"></span>
+    </button>
   </md-grid-tile>
 
 </md-grid-list>

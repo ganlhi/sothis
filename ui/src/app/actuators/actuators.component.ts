@@ -22,10 +22,12 @@ export class ActuatorsComponent implements OnInit {
     guide: false
   }
 
+  private _lockState: boolean        = null;
   private _roofState: boolean|string = null;
 
   @Input() small = false;
 
+  get lockState(): boolean|string { return this._lockState }
   get roofState(): boolean|string { return this._roofState }
   get shuttersNames(): string[] { return Object.keys(this._shutters) }
 
@@ -43,6 +45,11 @@ export class ActuatorsComponent implements OnInit {
       this._shutters[name] = state;
     })
 
+    this.service.switchUpdate$.subscribe(update => {
+      let [name, state] = update;
+      if (name == 'lock') this._lockState = state;
+    })
+
     this.service.roofUpdate$.subscribe(newState => this._roofState = newState);
   }
 
@@ -52,11 +59,20 @@ export class ActuatorsComponent implements OnInit {
     this.service.setShutterState(name, targetState);
   }
 
+  toggleLock() {
+    if (this._roofState !== false) return;
+
+    let targetState = !this._lockState;
+    this.service.setSwitchState('lock', targetState);
+  }
+
   setRoofState(targetState: boolean) {
+    if (this._roofState === 'opening' || this._roofState === 'closing') return;
+
     if (targetState) {
-      if (this._roofState == true || this._roofState == 'opening') return;
+      if (this._roofState === true || this._lockState === true) return;
     } else {
-      if (this._roofState == false || this._roofState == 'closing') return;
+      if (this._roofState === false) return;
     }
 
     console.log(`Requesting roof state: ${targetState}.`);

@@ -20,11 +20,22 @@ export class SwitchesComponent implements OnInit {
     camera: false,
     usb:    false,
     fan:    false,
-    flat:   false,
-    lock:   false
+    flat:   false
   };
-
+ 
   get switchesNames(): string[] { return Object.keys(this._switches) }
+
+
+  private _noutState: boolean|string = null;
+
+  get noutColor(): string { 
+    switch (this._noutState) {
+      case true:  return 'primary';
+      case false: return 'warn';
+      default:    return 'accent';
+    }
+  }
+
 
   constructor(private service: SothisService) {}
 
@@ -38,8 +49,7 @@ export class SwitchesComponent implements OnInit {
       'fan': 'fan',
       'usb': 'usb',
       'camera': 'camera',
-      'flat': 'flatscreen',
-      'lock': ['lock', 'lock-open']
+      'flat': 'flatscreen'
     }
 
     let icon = icons[name];
@@ -54,13 +64,21 @@ export class SwitchesComponent implements OnInit {
 
     this.service.switchUpdate$.subscribe(update => {
       let [name, state] = update;
-      this._switches[name] = state;
-    })
+      if (this._switches.hasOwnProperty(name)) {
+        this._switches[name] = state;
+      }
+    });
+
+    this.service.noutUpdate$.subscribe(newState => this._noutState = newState);
   }
 
   toggle(name: string) {
     console.log(`Toggling ${name}`);
     let targetState = !this._switches[name];
     this.service.setSwitchState(name, targetState);
+  }
+
+  wakeNout() {
+    this.service.wakeNout();
   }
 }
