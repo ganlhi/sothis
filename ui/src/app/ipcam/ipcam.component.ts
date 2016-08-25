@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { SothisService } from '../sothis.service';
+import { environment } from '../environment';
 
 @Component({
   moduleId: module.id,
@@ -11,10 +14,10 @@ export class IpcamComponent implements OnInit {
   cameraSnapshotUrl: string;
   cameraSnapshotLoading: boolean;
 
-  private static _cameraUrl  = 'http://78.245.98.112:25081';
-  private static _cameraAuth = { user: 'guest', password: 'sothiscam' };
+  private static _cameraUrl  = environment.ipcam.url;
+  private static _cameraAuth = environment.ipcam.auth;
 
-  constructor() {}
+  constructor(private _http: Http) {}
 
   ngOnInit() {
     this.updateCameraSnapshotUrl();
@@ -38,6 +41,31 @@ export class IpcamComponent implements OnInit {
 
     this.cameraSnapshotUrl = IpcamComponent._cameraUrl + '/snapshot.cgi?' + params.join('&');
     this.cameraSnapshotLoading = true;
+  }
+
+  cameraMove(dir: string) {
+    let cmd = null;
+    switch(dir) {
+      case 'up':    cmd = 0; break;
+      case 'down':  cmd = 2; break;
+      case 'left':  cmd = 4; break;
+      case 'right': cmd = 6; break;
+    }
+
+    if (cmd !== null) {
+      let params = [
+        `loginuse=${IpcamComponent._cameraAuth.user}`,
+        `loginpas=${IpcamComponent._cameraAuth.password}`,
+        `command=${cmd}`,
+        `onestep=1`
+      ];
+
+      let url = IpcamComponent._cameraUrl + '/decoder_control.cgi?' + params.join('&');
+
+      this._http
+        .get(url)
+        .subscribe(res => {}, err => {});
+    }
   }
 
 }

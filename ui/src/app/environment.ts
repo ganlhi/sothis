@@ -4,5 +4,9 @@
 
 export const environment = {
   production: false,
-  websocket: 'localhost:1880/ws'
+  websocket: 'localhost:1880/ws',
+  ipcam: {
+    url: 'http://localhost:81',
+    auth: { user: 'login', password: 'password' }
+  }
 };

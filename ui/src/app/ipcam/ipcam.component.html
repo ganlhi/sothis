@@ -1,4 +1,8 @@
 <div class="camera">
   <img [src]="cameraSnapshotUrl" (load)="updateCameraSnapshotUrl(1000)">
   <span class="loading" [hidden]="!cameraSnapshotLoading">Loading...</span>
+  <button (click)="cameraMove('up')" md-button color="primary" class="up"><span class="icon icon-up"></span></button>
+  <button (click)="cameraMove('down')" md-button color="primary" class="down"><span class="icon icon-down"></span></button>
+  <button (click)="cameraMove('left')" md-button color="primary" class="left"><span class="icon icon-left"></span></button>
+  <button (click)="cameraMove('right')" md-button color="primary" class="right"><span class="icon icon-right"></span></button>
 </div>
