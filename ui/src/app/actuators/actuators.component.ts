@@ -70,7 +70,7 @@ export class ActuatorsComponent implements OnInit {
     if (this._roofState === 'opening' || this._roofState === 'closing') return;
 
     if (targetState) {
-      if (this._roofState === true || this._lockState === true) return;
+      if (this._roofState === true) return;
     } else {
       if (this._roofState === false) return;
     }
