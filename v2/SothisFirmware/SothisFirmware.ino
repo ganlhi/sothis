@@ -45,13 +45,13 @@ void setup() {
   Wire.begin();
 
   // Ultrasonic sensors
-  pinMode(ULTRA_1_TRIG, OUTPUT); 
-  digitalWrite(ULTRA_1_TRIG, LOW); 
-  pinMode(ULTRA_1_ECHO, INPUT); 
+  pinMode(ULTRA_1_TRIG, OUTPUT);
+  digitalWrite(ULTRA_1_TRIG, LOW);
+  pinMode(ULTRA_1_ECHO, INPUT);
 
-  pinMode(ULTRA_2_TRIG, OUTPUT); 
-  digitalWrite(ULTRA_2_TRIG, LOW); 
-  pinMode(ULTRA_2_ECHO, INPUT); 
+  pinMode(ULTRA_2_TRIG, OUTPUT);
+  digitalWrite(ULTRA_2_TRIG, LOW);
+  pinMode(ULTRA_2_ECHO, INPUT);
 
   // DHT22 sensors + fan relay
   dht_int.begin();
@@ -65,7 +65,7 @@ void setup() {
 
 void loop() {
   // Check if serial messages await
-
+  process_messages();
 
   // Check if i2c messages await
   poll_i2c_buttons();
@@ -81,6 +81,28 @@ void loop() {
   apply_state();
 }
 
+void process_messages() {
+  String msg;
+
+  while (Serial.available() > 0) {
+    msg = Serial.readString();
+
+    for (int i = 0; i <= 7; i++) {
+      if (msg == "?:" + i) {
+        print_relay(i);
+        break;
+      }
+      if (msg == "R:" + i + ":0") {
+        set_relay(i, 0);
+        break;
+      }
+      if (msg == "R:" + i + ":1") {
+        set_relay(i, 1);
+        break;
+      }
+    }
+  }
+}
 
 void poll_i2c_buttons() {
   Wire.requestFrom(EXTENDER_ADDR_BUTTONS, 1);
@@ -108,6 +130,10 @@ void set_relay(num, status) {
   next_relays_state[num] = status;
 }
 
+void print_relay(num) {
+  Serial.println("R:"+num+":"+relays_state[num]);
+}
+
 void apply_state() {
   memcpy(relays_state, next_relays_state, sizeof(next_relays_state));
 
@@ -122,6 +148,10 @@ void apply_state() {
   Wire.endTransmission();
 
   digitalWrite(FAN_RELAY, fan_state);
+
+  for (int i = 0; i <= 7; i++) {
+    print_relay(i);
+  }
 }
 
 void read_ultras() {
@@ -152,7 +182,7 @@ void read_dhts() {
     // Interior
     t = dht_int.readTemperature();
     h = dht_int.readHumidity();
-  
+
     if (!isnan(t) && !isnan(h)) {
       temp_int = t;
       hum_int = h;
@@ -161,7 +191,7 @@ void read_dhts() {
     // Exterior
     t = dht_ext.readTemperature();
     h = dht_ext.readHumidity();
-  
+
     if (!isnan(t) && !isnan(h)) {
       temp_ext = t;
       hum_ext = h;
