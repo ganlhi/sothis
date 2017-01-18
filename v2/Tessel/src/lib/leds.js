@@ -2,8 +2,6 @@
 
 const Expander = require('./expander')
 
-module.exports = Leds
-
 
 /**
  * Handles LEDs used to indicate which relays are ON
@@ -24,21 +22,9 @@ class Leds extends Expander {
     }
   }
 
-  constructor(address = 0x20) {
-    super(address)
-
-    this._nums = {
-      mount:     0,
-      usb:       1,
-      focuser:   2,
-      dslr:      3,
-      roofOpen:  4,
-      roofClose: 5,
-      roofLock:  6,
-      fan:       7
-    }
-
-    this._states = Array.from({ length: 8 }, () => 0)
+  constructor(address) {
+    super(address || 0x20)
+    this.send(this._states)
   }
 
   getState(name) {
@@ -60,7 +46,7 @@ class Leds extends Expander {
 
     this._states[this._nums[name]] = Number(state)
 
-    return this.send(this.states)
+    return this.send(this._states)
   }
 
   toggleState(name) {
@@ -68,3 +54,5 @@ class Leds extends Expander {
   }
 
 }
+
+module.exports = Leds

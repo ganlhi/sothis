@@ -2,8 +2,6 @@
 
 const Expander = require('./expander')
 
-module.exports = Buttons
-
 
 /**
  * Handles buttons to manually toggle relays
@@ -13,8 +11,29 @@ module.exports = Buttons
  */
 class Buttons extends Expander {
 
-  constructor(address = 0x21) {
-    super(address)
+  constructor(address) {
+    super(address || 0x21)
+    setInterval(() => this._pollButtons(), 100)
+  }
 
+  _pollButtons() {
+    this.receive()
+      .then(values => {
+        // Inverted logic
+        values = values.map(v => v === '1' ? 0 : 1)
+
+        values.forEach((v, i) => {
+          if (v !== this._states[i]) {
+            this._states[i] = v
+            if (v > 0) {
+              const name = Object.keys(this._nums)[i]
+              this.emit('push', name)
+            }
+          }
+        })
+      })
+      .catch(err => { console.error(err) })
   }
 }
+
+module.exports = Buttons

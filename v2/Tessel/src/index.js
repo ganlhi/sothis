@@ -1,13 +1,15 @@
-// Import the interface to Tessel hardware
-var tessel = require('tessel');
+'use strict'
 
-// Turn one of the LEDs on to start.
-tessel.led[2].on();
+const Leds = require('./lib/leds')
+const Buttons = require('./lib/buttons')
 
-// Blink!
-setInterval(function () {
-  tessel.led[2].toggle();
-  tessel.led[3].toggle();
-}, 100);
+const leds = new Leds()
+const buttons = new Buttons()
 
-console.log('I am blinking! (Press CTRL + C to stop)');
+buttons.on('push', name => {
+  console.log(`Push ${name}`)
+  leds.toggleState(name)
+})
+
+setInterval(() => {}, 1000)
+

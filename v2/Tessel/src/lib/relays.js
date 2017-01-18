@@ -24,8 +24,21 @@ class Relays extends Leds {
     }
   }
 
-  constructor(address = 0x22) {
-    super(address)
+  constructor(address) {
+    super(address || 0x22)
+  }
+
+  setState(name, state) {
+    // Roof mutual exclusion
+    if (name === 'roofClose' && state > 0) {
+      this.setState('roofOpen', 0)
+    }
+
+    if (name === 'roofOpen' && state > 0) {
+      this.setState('roofClose', 0)
+    }
+
+    super(name, state)
   }
 
 }
