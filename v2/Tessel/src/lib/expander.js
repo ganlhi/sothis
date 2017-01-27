@@ -16,7 +16,10 @@ class Expander extends EventEmitter {
 
   constructor(address, port) {
     super()
+
     this._i2c = tessel.port[port || 'A'].I2C(address)
+
+    this._invertedLogic = false
 
     this._nums = {
       mount:     0,
@@ -33,6 +36,9 @@ class Expander extends EventEmitter {
   }
 
   send(values) {
+    if (this._invertedLogic) {
+      values = Expander.invertValues(values)
+    }
     return new Promise((resolve, reject) => {
       const buf = new Buffer([Expander.fromArray(values)])
       this._i2c.send(buf, (err) => {
@@ -51,7 +57,11 @@ class Expander extends EventEmitter {
         if (err) {
           reject(err)
         } else {
-          resolve(Expander.toArray(data.readUInt8()))
+          let values = Expander.toArray(data.readUInt8())
+          if (this._invertedLogic) {
+            values = Expander.invertValues(values)
+          }
+          resolve(values)
         }
       })
     })
@@ -65,8 +75,12 @@ class Expander extends EventEmitter {
 
   static toArray(bin) {
     const str =  leftPad(bin.toString(2), BYTES_NUM, '0')
-    const arr = str.split('')
+    const arr = str.split('').map(v => parseInt(v, 10))
     return arr
+  }
+
+  static invertValues(arr) {
+    return arr.map(v => 1 - v)
   }
 
 }

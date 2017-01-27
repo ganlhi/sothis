@@ -2,8 +2,6 @@
 
 const Leds = require('./leds')
 
-module.exports = Relays
-
 
 /**
  * Handles 8 relays
@@ -13,7 +11,17 @@ module.exports = Relays
  */
 class Relays extends Leds {
 
-  static errorMessage(type, value) {
+  constructor(address) {
+    super(address || 0x22)
+
+    this._invertedLogic = true
+
+    for(let name in this._nums) {
+      this.setState(name, false)
+    }
+  }
+
+  errorMessage(type, value) {
     switch (type) {
     case 'name':
       return `Unknown relay named ${value}`
@@ -24,21 +32,19 @@ class Relays extends Leds {
     }
   }
 
-  constructor(address) {
-    super(address || 0x22)
-  }
-
   setState(name, state) {
     // Roof mutual exclusion
-    if (name === 'roofClose' && state > 0) {
-      this.setState('roofOpen', 0)
+    if (name === 'roofClose' && state) {
+      this.setState('roofOpen', false)
     }
 
-    if (name === 'roofOpen' && state > 0) {
-      this.setState('roofClose', 0)
+    if (name === 'roofOpen' && state) {
+      this.setState('roofClose', false)
     }
 
-    super(name, state)
+    super.setState(name, state)
   }
 
 }
+
+module.exports = Relays

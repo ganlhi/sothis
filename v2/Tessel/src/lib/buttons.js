@@ -13,15 +13,13 @@ class Buttons extends Expander {
 
   constructor(address) {
     super(address || 0x21)
+    this._invertedLogic = true
     setInterval(() => this._pollButtons(), 100)
   }
 
   _pollButtons() {
     this.receive()
       .then(values => {
-        // Inverted logic
-        values = values.map(v => v === '1' ? 0 : 1)
-
         values.forEach((v, i) => {
           if (v !== this._states[i]) {
             this._states[i] = v

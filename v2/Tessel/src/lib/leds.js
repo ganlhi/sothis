@@ -11,7 +11,12 @@ const Expander = require('./expander')
  */
 class Leds extends Expander {
 
-  static errorMessage(type, value) {
+  constructor(address) {
+    super(address || 0x20)
+    this.send(this._states)
+  }
+
+  errorMessage(type, value) {
     switch (type) {
     case 'name':
       return `Unknown LED named ${value}`
@@ -22,14 +27,9 @@ class Leds extends Expander {
     }
   }
 
-  constructor(address) {
-    super(address || 0x20)
-    this.send(this._states)
-  }
-
   getState(name) {
     if (!this._nums.hasOwnProperty(name)) {
-      throw new Error(this.class.errorMessage('name', name))
+      throw new Error(this.errorMessage('name', name))
     }
 
     return Boolean(this._states[this._nums[name]])
@@ -37,16 +37,19 @@ class Leds extends Expander {
 
   setState(name, state) {
     if (!this._nums.hasOwnProperty(name)) {
-      throw new Error(this.class.errorMessage('name', name))
+      throw new Error(this.errorMessage('name', name))
     }
 
     if (typeof state !== 'boolean') {
-      throw new Error(this.class.errorMessage('state', state))
+      throw new Error(this.errorMessage('state', state))
     }
 
     this._states[this._nums[name]] = Number(state)
 
-    return this.send(this._states)
+    return this.send(this._states).then(() => {
+      console.log('Send', name, state)
+      this.emit('state', name, this.getState(name))
+    })
   }
 
   toggleState(name) {
