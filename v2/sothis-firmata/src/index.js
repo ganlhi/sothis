@@ -16,8 +16,8 @@ Board.requestPort((error, port) => {
   const board = new Board(port.comName)
 
   leds.connect(board, 0x20)
-  buttons.connect(board, 0x21)
-  relays.connect(board, 0x22)
+  relays.connect(board, 0x21)
+  buttons.connect(board, 0x22)
 })
 
 buttons.on('push', name => {

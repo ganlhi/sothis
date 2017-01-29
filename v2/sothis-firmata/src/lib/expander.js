@@ -16,6 +16,7 @@ class Expander extends EventEmitter {
 
   constructor() {
     super()
+    this.setMaxListeners(50)
 
     this._invertedLogic = false
 
@@ -89,7 +90,7 @@ class Expander extends EventEmitter {
   }
 
   static fromArray(arr) {
-    const str = leftPad(arr.join(''), BYTES_NUM, '0')
+    const str = leftPad(arr.reverse().join(''), BYTES_NUM, '0')
     const bin = parseInt(str, 2)
     return bin
   }
@@ -97,7 +98,7 @@ class Expander extends EventEmitter {
   static toArray(bin) {
     const str =  leftPad(bin.toString(2), BYTES_NUM, '0')
     const arr = str.split('').map(v => parseInt(v, 10))
-    return arr
+    return arr.reverse()
   }
 
   static invertValues(arr) {
