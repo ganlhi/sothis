@@ -42,7 +42,7 @@ class Relays extends Leds {
       this.setState('roofClose', false)
     }
 
-    super.setState(name, state)
+    return super.setState(name, state)
   }
 
 }

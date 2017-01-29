@@ -1,5 +1,7 @@
 'use strict'
 
+const debounce = require('debounce')
+
 const Board = require('firmata')
 
 const Leds = require('./lib/leds')
@@ -9,6 +11,15 @@ const Relays = require('./lib/relays')
 const leds = new Leds()
 const buttons = new Buttons()
 const relays = new Relays()
+
+const server = require('diet')
+const app = server()
+
+const WebSocket = require('ws')
+const wss = new WebSocket.Server({
+  perMessageDeflate: false,
+  port: 8001
+})
 
 Board.requestPort((error, port) => {
   if (error) throw new Error('Error requesting port: '+error)
@@ -20,66 +31,95 @@ Board.requestPort((error, port) => {
   buttons.connect(board, 0x22)
 })
 
-buttons.on('push', name => {
+buttons.on('push', debounce(name => {
   console.log(`Push ${name}`)
   relays.toggleState(name)
-})
+}, 100))
 
 relays.on('state', (name, state) => {
   console.log(`State of ${name}: ${state}`)
+  let data = {}
+  data[name] = state
+  broadcast(data)
   leds.setState(name, state)
 })
 
-setInterval(() => {}, 1000)
+wss.on('connection', ws => {
+  console.log('WS connection')
+})
 
-// const server = require('diet')
-// const app = server()
-// app.listen('http://localhost:8000')
+function broadcast(data) {
+  console.log('Broadcasting to '+wss.clients.length+' clients: ', data)
+  wss.clients.forEach(client => {
+    console.log('Client state: ', client.readyState)
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(JSON.stringify(data))
+    }
+  })
+}
 
-// let states = {
-//   mount: 1,
-//   dslr: 0,
-//   roofOpen: 0,
-//   roofClose: 0
-// }
+app.listen('http://localhost:8000')
 
-// app.get('/:name', function($) {
-//   if (!states.hasOwnProperty($.params.name)) {
-//     $.failure()
-//   } else {
-//     let data = {}
-//     data[$.params.name] = states[$.params.name]
-//     $.json(data)
-//   }
-// })
+app.get('/:name', function($) {
+  try {
+    const state = relays.getState($.params.name)
+    let data = {}
+    data[$.params.name] = state
+    $.json(data)
+  } catch(err) {
+    $.failure()
+  }
+})
 
-// app.post('/roof/:action', function($) {
-//   if ($.params.action === 'open') {
-//     states.roofClose = 0
-//     states.roofOpen = 1
-//     setTimeout(() => {
-//       states.roofOpen = 0
-//       $.json({ roof: 'open' })
-//     }, 10000)
-//   } else if ($.params.action === 'close') {
-//     states.roofClose = 1
-//     states.roofOpen = 0
-//     setTimeout(() => {
-//       states.roofClose = 0
-//       $.json({ roof: 'close' })
-//     }, 10000)
-//   } else {
-//     $.failure()
-//   }
-// })
+const ROOF_OPEN_TIME = 40000
+const ROOF_CLOSE_TIME = 40000
+app.post('/roof/:action', function($) {
+  try {
+    if ($.params.action === 'open') {
+      relays.setState('roofOpen', true)
+      setTimeout(() => {
+        relays.setState('roofOpen', false)
+          .then(() => broadcast({ roof: 'opened' }))
+      }, ROOF_OPEN_TIME)
+      let data = { roof: 'opening' }
+      broadcast(data)
+      $.json(data)    
+    } else if ($.params.action === 'close') {
+      relays.setState('roofClose', true)
+      setTimeout(() => {
+        relays.setState('roofClose', false)
+          .then(() => broadcast({ roof: 'closed' }))
+      }, ROOF_CLOSE_TIME)
+      let data = { roof: 'closing' }
+      broadcast(data)
+      $.json(data)     
+    } else {
+      console.error('ELSE ERR')    
+      $.failure()
+    }
+  } catch(err) {
+    console.error(err)
+    $.failure()
+  }
+})
 
-// app.post('/:name/:state', function($) {
-//   if (!states.hasOwnProperty($.params.name) || ($.params.state != 1 && $.params.state != 0)) {
-//     $.failure()
-//   } else {
-//     states[$.params.name] = $.params.state
-//     let data = {}
-//     data[$.params.name] = $.params.state
-//     $.json(data)
-//   }
-// })
+app.post('/:name/:state', function($) {
+  try {
+    const state = Boolean(parseInt($.params.state, 10))
+    const name = $.params.name
+
+    relays.setState(name, state)
+      .then(() => {
+        let data = {}
+        data[name] = relays.getState(name)
+        $.json(data)
+      })
+      .catch((err) => { 
+        console.error('Promise', err)
+        $.failure() 
+      })
+  } catch(err) {
+    console.error('Catch', err)
+    $.failure()
+  }
+})
