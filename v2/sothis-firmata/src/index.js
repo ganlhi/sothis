@@ -21,16 +21,6 @@ const wss = new WebSocket.Server({
   port: 8001
 })
 
-Board.requestPort((error, port) => {
-  if (error) throw new Error('Error requesting port: '+error)
-
-  const board = new Board(port.comName)
-
-  leds.connect(board, 0x20)
-  relays.connect(board, 0x21)
-  buttons.connect(board, 0x22)
-})
-
 buttons.on('push', debounce(name => {
   console.log(`Push ${name}`)
   relays.toggleState(name)
@@ -58,8 +48,6 @@ function broadcast(data) {
   })
 }
 
-app.listen('http://localhost:8000')
-
 app.get('/:name', function($) {
   try {
     const state = relays.getState($.params.name)
@@ -83,7 +71,7 @@ app.post('/roof/:action', function($) {
       }, ROOF_OPEN_TIME)
       let data = { roof: 'opening' }
       broadcast(data)
-      $.json(data)    
+      $.json(data)
     } else if ($.params.action === 'close') {
       relays.setState('roofClose', true)
       setTimeout(() => {
@@ -92,9 +80,9 @@ app.post('/roof/:action', function($) {
       }, ROOF_CLOSE_TIME)
       let data = { roof: 'closing' }
       broadcast(data)
-      $.json(data)     
+      $.json(data)
     } else {
-      console.error('ELSE ERR')    
+      console.error('ELSE ERR')
       $.failure()
     }
   } catch(err) {
@@ -114,12 +102,35 @@ app.post('/:name/:state', function($) {
         data[name] = relays.getState(name)
         $.json(data)
       })
-      .catch((err) => { 
+      .catch((err) => {
         console.error('Promise', err)
-        $.failure() 
+        $.failure()
       })
   } catch(err) {
     console.error('Catch', err)
     $.failure()
   }
 })
+
+
+
+// Start
+function initBoardAndListen() {
+  Board.requestPort((error, port) => {
+    if (error) {
+      console.error('Error requesting port: '+error)
+      setTimeout(initBoardAndListen, 10000)
+      return
+    }
+
+    const board = new Board(port.comName)
+
+    leds.connect(board, 0x20)
+    relays.connect(board, 0x21)
+    buttons.connect(board, 0x22)
+
+    app.listen('http://localhost:8000')
+  })
+}
+
+initBoardAndListen()
