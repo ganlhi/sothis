@@ -9,7 +9,7 @@
   <ion-list>
     <ion-item *ngFor="let sw of switches">
       <ion-label>{{ sw.name }}</ion-label>
-      <ion-toggle [checked]="sw.status" item-right></ion-toggle>
+      <ion-toggle [checked]="sw.status" (ionChange)="toggled(sw)" item-right></ion-toggle>
     </ion-item>
   </ion-list>
 

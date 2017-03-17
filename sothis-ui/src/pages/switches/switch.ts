@@ -1,4 +1,4 @@
 export interface Switch {
   name: string;
-  status: boolean;
+  status: boolean | string;
 }

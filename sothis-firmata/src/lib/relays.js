@@ -45,6 +45,16 @@ class Relays extends Leds {
     return super.setState(name, state)
   }
 
+  getStates() {
+    let states = {}
+
+    Object.keys(this._nums).forEach(name => {
+      states[name] = Boolean(this._states[this._nums[name]])
+    })
+
+    return states
+  }
+
 }
 
 module.exports = Relays

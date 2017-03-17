@@ -1,3 +1,4 @@
+import { Sothis } from './../providers/sothis';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
@@ -22,6 +23,9 @@ import { TabsPage } from '../pages/tabs/tabs';
     SwitchesPage,
     TabsPage
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}]
+  providers: [
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    Sothis
+  ]
 })
 export class AppModule {}

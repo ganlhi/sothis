@@ -1,3 +1,4 @@
+import { Sothis } from './../../providers/sothis';
 import { Switch } from './switch';
 import { Component, OnInit } from '@angular/core';
 
@@ -11,10 +12,14 @@ export class SwitchesPage implements OnInit {
 
   switches: Set<Switch>;
 
-  constructor(public navCtrl: NavController) {}
+  constructor(public navCtrl: NavController, private sothis: Sothis) {}
 
   ngOnInit() {
+    this.sothis.states$.subscribe(sw => this.switches.add(sw))
+  }
 
+  toggled(sw: Switch) {
+    this.sothis.setState(sw)
   }
 
 }

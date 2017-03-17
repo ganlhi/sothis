@@ -48,6 +48,14 @@ function broadcast(data) {
   })
 }
 
+app.get('/', function($) {
+  try {
+    $.json(relays.getStates())
+  } catch(err) {
+    $.failure()
+  }
+})
+
 app.get('/:name', function($) {
   try {
     const state = relays.getState($.params.name)
